@@ -69,6 +69,98 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+############################################
+# --- Helper Functions (Security) ---
+############################################
+
+
+# Used for user registration: hash the password before storing it in the database
+def get_password_hash(password: str) -> str:
+    pwd_bytes = password.encode("utf-8")  # Encode password to bytes
+    salt = bcrypt.gensalt(rounds=12)
+    hashed = bcrypt.hashpw(pwd_bytes, salt)  # Hash the password
+    return hashed.decode("utf-8")
+
+
+# User for login: verify the provided password against the hashed password stored in DB
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    pwd_bytes = plain_password.encode("utf-8")  # Encode plain password to bytes
+    hashed_bytes = hashed_password.encode("utf-8")  # Encode hashed password to bytes
+    return bcrypt.checkpw(pwd_bytes, hashed_bytes)  # Use checkpw to securely compare
+
+
+# User for login: create a JWT token that includes the username and with  an expiration time
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    payload = data.copy()
+    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=15))
+    payload.update({"exp": expire})
+    encoded_jwt = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
+# This function will be used as dependency in protected routes.
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        # Decode the JWT token to get the payload, which contains the username (under "sub" claim)
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        print(f"Decoded token payload: {payload}")
+        if username is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload"
+            )
+        return username  # Return the username as the current user
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Token has expired"
+        )
+    except jwt.PyJWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+        )
+
+
+############################################
+# --- Seed Users ---
+############################################
+
+
+# Simple pydantic model for validating the User Registration Request
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
+    role: Optional[str] = "user"  # Optional field for user role (e.g., admin, user)
+
+
+# Helper function to register a user in the database, used for creating predefined users for testing purposes.
+# In a real application, you would have a proper registration endpoint and process.
+def register_user(data: RegisterRequest):
+    existing_user = users_collection.find_one({"username": data.username})
+    if existing_user:
+        return  # Dothing if user already exists, simply ignore the registration request
+    users_collection.insert_one(
+        {
+            "username": data.username,
+            "password": get_password_hash(data.password),
+            "role": data.role,  # Default role, can be extended to accept from request
+        }
+    )
+    return {
+        "status": "success",
+        "message": f"User {data.username} registered successfully!",
+    }
+
+
+# Pre-populate the database with some users for testing purposes.
+register_user(
+    RegisterRequest(username="admin@example.com", password="admin", role="admin")
+)
+register_user(
+    RegisterRequest(username="testuser@example.com", password="testuser", role="user")
+)
+
 ############################################
 # --- Seed Flower Products ---
 ############################################
@@ -93,6 +185,40 @@ def seed_products():
 ############################################
 # --- All FastAPI endpoints ---
 ############################################
+
+
+# --- Login endpoint to obtain JWT token ---
+@app.post("/token")
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    # Fetch user from database
+    user = users_collection.find_one({"username": form_data.username})
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+        )
+
+    # Check if user exists and password matches
+    if not user or not verify_password(form_data.password, user.get("password")):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    # Create the JWT token
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": form_data.username},
+        expires_delta=access_token_expires,
+    )
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "username": form_data.username,
+        "role": user.get("role"),
+    }
+
 
 # --- Product endpoints ---
 
@@ -154,4 +280,3 @@ async def remove_from_cart(item_id: str, current_user: str = Depends(get_current
     if result.deleted_count == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cart item not found")
     return Response(status_code=status.HTTP_204_NO_CONTENT)
-
