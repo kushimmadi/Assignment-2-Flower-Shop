@@ -1,0 +1,94 @@
+/* Centering the card on the screen */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #FFF8F5;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+}
+
+/* The Card */
+.login-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(180, 120, 100, 0.12);
+  border: 1px solid #F5E6D8;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 0.5rem;
+  color: #A43A63;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.login-card p {
+  color: #7D6B5D;
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+/* Form Styling */
+.input-group {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4A3728;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #F5D5E0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  color: #4A3728;
+  background-color: #FFFAF8;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #A43A63;
+  box-shadow: 0 0 0 3px rgba(164, 58, 99, 0.1);
+}
+
+/* Button */
+.login-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #A43A63;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-button:hover {
+  background-color: #8E2F55;
+}
+
+.login-footer {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #7D6B5D;
+}
+
+.login-footer a {
+  color: #A43A63;
+  text-decoration: none;
+}
