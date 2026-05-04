@@ -11,6 +11,15 @@ export default function FlowerShop() {
   const [cartOpen, setCartOpen] = useState(false);
   const [notification, setNotification] = useState('');
 
+  const token = localStorage.getItem('token');
+  const username = localStorage.getItem('username');
+  const navigate = useNavigate();
+
+  const authHeaders = {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  };
+
   // Fetch products and cart when first loaded
   useEffect(() => {
     fetchProducts();
@@ -142,6 +151,11 @@ export default function FlowerShop() {
             </div>
           </div>
           <div className="navbar-right">
+            <span className="navbar-user">👤 {username}</span>
+            <button className="btn-logout" onClick={handleLogout} aria-label="Logout">
+              <LogOut size={18} />
+              Logout
+            </button>
             <button
               className="cart-toggle"
               onClick={() => setCartOpen(true)}
