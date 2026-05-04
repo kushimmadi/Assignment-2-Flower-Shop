@@ -52,39 +52,11 @@ body {
   letter-spacing: -0.5px;
 }
 
-/* Right side of navbar: user info, logout, cart */
+/* Right side of navbar - cart */
 .navbar-right {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
-
-.navbar-user {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #7D6B5D;
-  white-space: nowrap;
-}
-
-/* Logout button */
-.btn-logout {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  background: #FFF0F5;
-  border: 2px solid #F5D5E0;
-  border-radius: 8px;
-  padding: 0.45rem 0.85rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #A43A63;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-logout:hover {
-  background: #FFE4EE;
-  border-color: #E8A0BF;
 }
 
 /* Cart toggle button */
