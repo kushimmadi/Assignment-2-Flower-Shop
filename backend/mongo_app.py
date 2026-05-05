@@ -280,3 +280,43 @@ async def remove_from_cart(item_id: str, current_user: str = Depends(get_current
     if result.deleted_count == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cart item not found")
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+############################################
+# --- Admin endpoints (role-based access) ---
+############################################
+
+
+async def get_current_admin(current_user: str = Depends(get_current_user)):
+    """Dependency that ensures the current user has the admin role"""
+    user = users_collection.find_one({"username": current_user})
+    if not user or user.get("role") != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
+    return current_user
+
+
+@app.get("/admin/carts")
+async def admin_get_all_carts(current_admin: str = Depends(get_current_admin)):
+    """Admin: fetch all cart items across all users"""
+    return cart_collection.find({}, {"_id": 0}).to_list()
+
+
+@app.put("/admin/carts/{item_id}")
+async def admin_update_cart_item(item_id: str, updated: dict, current_admin: str = Depends(get_current_admin)):
+    """Admin: update the quantity of any user's cart item"""
+    result = cart_collection.update_one(
+        {"id": item_id},
+        {"$set": {"quantity": updated.get("quantity")}},
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cart item not found")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@app.delete("/admin/carts/{item_id}")
+async def admin_remove_cart_item(item_id: str, current_admin: str = Depends(get_current_admin)):
+    """Admin: remove any user's cart item"""
+    result = cart_collection.delete_one({"id": item_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cart item not found")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
