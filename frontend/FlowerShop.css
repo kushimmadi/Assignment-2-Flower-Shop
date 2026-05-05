@@ -508,3 +508,76 @@ body {
     font-size: 1.75rem;
   }
 }
+
+/* Admin View button in navbar — only visible to admin users */
+.btn-admin-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #FFF0F5;
+  border: 2px solid #F5D5E0;
+  border-radius: 8px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #A43A63;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-admin-nav:hover {
+  background: #FFE4EE;
+  border-color: #E8A0BF;
+}
+
+/* Admin view: column of per-user cart cards */
+.admin-carts {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Card wrapping one user's entire cart */
+.user-cart-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(180, 120, 100, 0.08);
+  border: 1px solid #F5E6D8;
+}
+
+.user-cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #FFF8F5;
+  border-bottom: 1px solid #F5E6D8;
+}
+
+.user-cart-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #4A3728;
+}
+
+.user-cart-total {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #A43A63;
+}
+
+/* Read-only quantity badge in admin cart view */
+.admin-qty {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7D6B5D;
+  background: #FFF5F0;
+  border: 1px solid #F5E6D8;
+  border-radius: 8px;
+  padding: 0.25rem 0.6rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
