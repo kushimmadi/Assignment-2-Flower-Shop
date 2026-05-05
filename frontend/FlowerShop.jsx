@@ -13,6 +13,7 @@ export default function FlowerShop() {
 
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
+  const role = localStorage.getItem('role'); // Used to show admin-only navigation
   const navigate = useNavigate();
 
   const authHeaders = {
@@ -35,6 +36,7 @@ export default function FlowerShop() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('role'); // Clear role so stale admin access doesn't persist
     navigate('/login', { replace: true });
   };
 
@@ -152,6 +154,12 @@ export default function FlowerShop() {
           </div>
           <div className="navbar-right">
             <span className="navbar-user">👤 {username}</span>
+            {role === 'admin' && (
+              // Only rendered for admin users — navigates to the admin cart view
+              <button className="btn-admin-nav" onClick={() => navigate('/admin')} aria-label="View all carts">
+                View All Carts
+              </button>
+            )}
             <button className="btn-logout" onClick={handleLogout} aria-label="Logout">
               <LogOut size={18} />
               Logout
