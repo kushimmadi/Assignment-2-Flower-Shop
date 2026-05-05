@@ -10,6 +10,8 @@ export default function FlowerShop() {
   const [cartItems, setCartItems] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [notification, setNotification] = useState('');
+  // pendingRemove holds the cart item awaiting confirmation, or null when the dialog is closed
+  const [pendingRemove, setPendingRemove] = useState(null);
 
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
@@ -111,8 +113,14 @@ export default function FlowerShop() {
     }
   };
 
-  // Remove item from cart
-  const removeFromCart = async (itemId) => {
+  // Open the confirmation dialog before removing an item
+  const confirmRemove = (item) => setPendingRemove(item);
+
+  // Called when the user confirms removal in the dialog
+  const removeFromCart = async () => {
+    if (!pendingRemove) return;
+    const itemId = pendingRemove.id;
+    setPendingRemove(null);
     try {
       const response = await fetch(`${API_BASE_URL}/cart/${itemId}`, {
         method: 'DELETE',
@@ -199,6 +207,24 @@ export default function FlowerShop() {
         </div>
       </main>
 
+      {/* Confirm-remove dialog — rendered when the user clicks the trash icon */}
+      {pendingRemove && (() => {
+        const product = getProduct(pendingRemove.product_id);
+        return (
+          <div className="dialog-backdrop" role="dialog" aria-modal="true" aria-label="Remove item confirmation">
+            <div className="dialog-card">
+              <p className="dialog-message">
+                Remove <strong>{product?.name}</strong> from your cart?
+              </p>
+              <div className="dialog-actions">
+                <button className="btn-dialog-cancel" onClick={() => setPendingRemove(null)}>Keep</button>
+                <button className="btn-dialog-confirm" onClick={removeFromCart}>Remove</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Cart Overlay */}
       <div
         className={`overlay ${cartOpen ? 'overlay-visible' : ''}`}
@@ -259,7 +285,7 @@ export default function FlowerShop() {
                     </div>
                     <button
                       className="btn-remove"
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => confirmRemove(item)}
                       aria-label={`Remove ${product.name}`}
                     >
                       <Trash2 size={16} />
