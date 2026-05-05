@@ -508,3 +508,75 @@ body {
     font-size: 1.75rem;
   }
 }
+
+/* Confirm-remove dialog — full-screen backdrop */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dialog card centred over the backdrop */
+.dialog-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  max-width: 340px;
+  width: 90%;
+  text-align: center;
+}
+
+.dialog-message {
+  font-size: 1rem;
+  color: #4A3728;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* "Keep" button — secondary/cancel style */
+.btn-dialog-cancel {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #F5D5E0;
+  background: #FFF0F5;
+  color: #A43A63;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-dialog-cancel:hover {
+  background: #FFE4EE;
+  border-color: #E8A0BF;
+}
+
+/* "Remove" button — destructive/confirm style */
+.btn-dialog-confirm {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #A43A63;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-dialog-confirm:hover {
+  background: #8E2F55;
+}
