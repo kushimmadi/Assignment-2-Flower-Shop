@@ -509,7 +509,7 @@ body {
   }
 }
 
-/* Admin View button in navbar — only visible to admin users */
+/* Admin View button in navbar */
 .btn-admin-nav {
   display: flex;
   align-items: center;
@@ -530,7 +530,7 @@ body {
   border-color: #E8A0BF;
 }
 
-/* Admin view: column of per-user cart cards */
+/* Admin View: column of user carts */
 .admin-carts {
   display: flex;
   flex-direction: column;
@@ -539,7 +539,6 @@ body {
   margin: 0 auto;
 }
 
-/* Card wrapping one user's entire cart */
 .user-cart-card {
   background: #FFFFFF;
   border-radius: 16px;
@@ -569,7 +568,7 @@ body {
   color: #A43A63;
 }
 
-/* Read-only quantity badge in admin cart view */
+/* Admin View: quantity badge */
 .admin-qty {
   font-size: 0.85rem;
   font-weight: 600;

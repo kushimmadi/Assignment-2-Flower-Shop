@@ -31,7 +31,7 @@ const Login = () => {
         // Store the access token and user information in localStorage for later use. This allows the application to maintain the user's session across different pages and browser refreshes.
         localStorage.setItem('token', data.access_token);
         localStorage.setItem('username', data.username);
-        localStorage.setItem('role', data.role); // Store role so the UI can show admin-only controls
+        localStorage.setItem('role', data.role);
         navigate('/'); // Navigate to the home page upon successful login
       } else {
         alert(data.detail || "Login failed. Please check your credentials.");
