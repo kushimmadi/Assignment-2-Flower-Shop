@@ -10,8 +10,7 @@ export default function FlowerShop() {
   const [cartItems, setCartItems] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [notification, setNotification] = useState('');
-  // pendingRemove holds the cart item awaiting confirmation, or null when the dialog is closed
-  const [pendingRemove, setPendingRemove] = useState(null);
+  const [pendingRemove, setPendingRemove] = useState(null); //holds the cart item awaiting delete confirmation
 
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
@@ -116,7 +115,7 @@ export default function FlowerShop() {
   // Open the confirmation dialog before removing an item
   const confirmRemove = (item) => setPendingRemove(item);
 
-  // Called when the user confirms removal in the dialog
+  // Confirmed removal from cart
   const removeFromCart = async () => {
     if (!pendingRemove) return;
     const itemId = pendingRemove.id;
@@ -207,7 +206,7 @@ export default function FlowerShop() {
         </div>
       </main>
 
-      {/* Confirm-remove dialog — rendered when the user clicks the trash icon */}
+      {/* Confirm-remove dialog */}
       {pendingRemove && (() => {
         const product = getProduct(pendingRemove.product_id);
         return (
