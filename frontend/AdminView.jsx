@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import Navbar from './Navbar';
 import './FlowerShop.css';
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
@@ -83,27 +84,12 @@ export default function AdminView() {
 
   return (
     <div className="shop-container">
-      {/* Navbar */}
-      <nav className="shop-navbar">
-        <div className="navbar-inner">
-          <div className="logo">
-            <span className="logo-icon">🌸</span>
-            <div>
-              <h1 className="shop-title">Flower Shop</h1>
-            </div>
-          </div>
-          <div className="navbar-right">
-            <span className="navbar-user">👤 {username}</span>
-            <button className="btn-admin-nav" onClick={() => navigate('/')} aria-label="Back to shop">
-              <ArrowLeft size={16} /> Back to Shop
-            </button>
-            <button className="btn-logout" onClick={handleLogout} aria-label="Logout">
-              <LogOut size={18} />
-              Logout
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar username={username} onLogout={handleLogout}>
+        {/* Back to shop button replaces the admin nav button on this view */}
+        <button className="btn-admin-nav" onClick={() => navigate('/')} aria-label="Back to shop">
+          <ArrowLeft size={16} /> Back to Shop
+        </button>
+      </Navbar>
 
       {/* Main content */}
       <main className="main-content">
@@ -137,7 +123,6 @@ export default function AdminView() {
                             ${(product.price * item.quantity).toFixed(2)}
                           </p>
                         </div>
-                        {/* Read-only quantity — admins view but do not edit carts here */}
                         <span className="admin-qty">Qty: {item.quantity}</span>
                       </li>
                     );

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Plus, Minus, Trash2, X, LogOut } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Trash2, X } from 'lucide-react';
+import Navbar from './Navbar';
 import './FlowerShop.css';
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
@@ -13,7 +14,7 @@ export default function FlowerShop() {
 
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
-  const role = localStorage.getItem('role'); // Used to show admin-only navigation
+  const role = localStorage.getItem('role');
   const navigate = useNavigate();
 
   const authHeaders = {
@@ -36,7 +37,7 @@ export default function FlowerShop() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    localStorage.removeItem('role'); // Clear role so stale admin access doesn't persist
+    localStorage.removeItem('role');
     navigate('/login', { replace: true });
   };
 
@@ -143,38 +144,22 @@ export default function FlowerShop() {
 
   return (
     <div className="shop-container">
-      {/* Navbar */}
-      <nav className="shop-navbar">
-        <div className="navbar-inner">
-          <div className="logo">
-            <span className="logo-icon">🌸</span>
-            <div>
-              <h1 className="shop-title">Flower Shop</h1>
-            </div>
-          </div>
-          <div className="navbar-right">
-            <span className="navbar-user">👤 {username}</span>
-            {role === 'admin' && (
-              // Only rendered for admin users — navigates to the admin cart view
-              <button className="btn-admin-nav" onClick={() => navigate('/admin')} aria-label="View all carts">
-                View All Carts
-              </button>
-            )}
-            <button className="btn-logout" onClick={handleLogout} aria-label="Logout">
-              <LogOut size={18} />
-              Logout
-            </button>
-            <button
-              className="cart-toggle"
-              onClick={() => setCartOpen(true)}
-              aria-label="Open shopping cart"
-            >
-              <ShoppingCart size={22} />
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </button>
-          </div>
-        </div>
-      </nav>
+      <Navbar username={username} onLogout={handleLogout}>
+        {role === 'admin' && (
+          // Only for admin users
+          <button className="btn-admin-nav" onClick={() => navigate('/admin')} aria-label="View all carts">
+            View All Carts
+          </button>
+        )}
+        <button
+          className="cart-toggle"
+          onClick={() => setCartOpen(true)}
+          aria-label="Open shopping cart"
+        >
+          <ShoppingCart size={22} />
+          {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+        </button>
+      </Navbar>
 
       {/* Toast */}
       <div className={`toast ${notification ? 'toast-show' : ''}`}>
