@@ -12,6 +12,7 @@ export default function FlowerShop() {
   const [cartOpen, setCartOpen] = useState(false);
   const [notification, setNotification] = useState('');
   const [pendingRemove, setPendingRemove] = useState(null); //holds the cart item awaiting delete confirmation
+  const [searchQuery, setSearchQuery] = useState('');
 
   const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
@@ -176,8 +177,22 @@ export default function FlowerShop() {
       {/* Product Grid */}
       <main className="main-content">
         <h2 className="section-heading">Flower Bouquets</h2>
+        <div className="search-bar-wrapper">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search bouquets by name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            aria-label="Search flower bouquets by name"
+          />
+        </div>
         <div className="product-grid">
-          {products.map((product) => (
+          {products
+            .filter((product) =>
+              product.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+            .map((product) => (
             <div key={product.id} className="product-card">
               <img className="card-image" src={product.image_url} alt={product.name} />
               <div className="card-body">
