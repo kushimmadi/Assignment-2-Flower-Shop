@@ -17,7 +17,7 @@ export default function Navbar({ username, onLogout, children }) {
           {children}
           <button className="btn-logout" onClick={onLogout} aria-label="Logout">
             <LogOut size={18} />
-            Logout
+            <span>Logout</span>
           </button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Plus, Minus, Trash2, X } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Trash2, X, LayoutList } from 'lucide-react';
 import Navbar from './Navbar';
 import './FlowerShop.css';
 
@@ -148,7 +148,7 @@ export default function FlowerShop() {
         {role === 'admin' && (
           // Only for admin users
           <button className="btn-admin-nav" onClick={() => navigate('/admin')} aria-label="View all carts">
-            View All Carts
+            <LayoutList size={16} /> <span>View All Carts</span>
           </button>
         )}
         <button

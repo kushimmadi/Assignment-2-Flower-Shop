@@ -497,6 +497,23 @@ body {
   .navbar-user {
     display: none;
   }
+
+  .navbar-right {
+    gap: 0.4rem;
+  }
+
+  /* Show only button icon on mobile */
+  .btn-logout span,
+  .btn-admin-nav span {
+    display: none;
+  }
+
+  .btn-logout,
+  .btn-admin-nav {
+    padding: 0.45rem;
+    min-width: 36px;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 480px) {

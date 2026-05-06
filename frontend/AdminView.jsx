@@ -87,7 +87,7 @@ export default function AdminView() {
       <Navbar username={username} onLogout={handleLogout}>
         {/* Back to shop button replaces the admin nav button on this view */}
         <button className="btn-admin-nav" onClick={() => navigate('/')} aria-label="Back to shop">
-          <ArrowLeft size={16} /> Back to Shop
+          <ArrowLeft size={16} /> <span>Back to Shop</span>
         </button>
       </Navbar>
 
