@@ -164,6 +164,36 @@ body {
   margin-bottom: 2rem;
 }
 
+/* Search bar */
+.search-bar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 480px;
+  padding: 0.65rem 1.1rem;
+  border: 2px solid #F5D5E0;
+  border-radius: 24px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #4A3728;
+  background: #FFFFFF;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: #B89E93;
+}
+
+.search-input:focus {
+  border-color: #D4688E;
+  box-shadow: 0 0 0 3px rgba(212, 104, 142, 0.15);
+}
+
 /* Product grid (all flower cards on page) */
 .product-grid {
   display: grid;
