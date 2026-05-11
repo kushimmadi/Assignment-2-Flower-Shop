@@ -150,6 +150,10 @@ export default function FlowerShop() {
 
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="shop-container">
       <Navbar username={username} onLogout={handleLogout}>
@@ -188,29 +192,29 @@ export default function FlowerShop() {
           />
         </div>
         <div className="product-grid">
-          {products
-            .filter((product) =>
-              product.name.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-            .map((product) => (
-            <div key={product.id} className="product-card">
-              <img className="card-image" src={product.image_url} alt={product.name} />
-              <div className="card-body">
-                <h3 className="card-name">{product.name}</h3>
-                <p className="card-desc">{product.description}</p>
-                <div className="card-footer">
-                  <span className="card-price">${product.price.toFixed(2)}</span>
-                  <button
-                    className="btn-add"
-                    onClick={() => addToCart(product.id)}
-                  >
-                    <Plus size={16} />
-                    Add to Cart
-                  </button>
+          {filteredProducts.length === 0 ? (
+            <p className="no-products">No bouquets match your search.</p>
+          ) : (
+            filteredProducts.map((product) => (
+              <div key={product.id} className="product-card">
+                <img className="card-image" src={product.image_url} alt={product.name} />
+                <div className="card-body">
+                  <h3 className="card-name">{product.name}</h3>
+                  <p className="card-desc">{product.description}</p>
+                  <div className="card-footer">
+                    <span className="card-price">${product.price.toFixed(2)}</span>
+                    <button
+                      className="btn-add"
+                      onClick={() => addToCart(product.id)}
+                    >
+                      <Plus size={16} />
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       </main>
 

@@ -194,6 +194,15 @@ body {
   box-shadow: 0 0 0 3px rgba(212, 104, 142, 0.15);
 }
 
+.no-products {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #7D6B5D;
+  padding: 2rem 0;
+}
+
 /* Product grid (all flower cards on page) */
 .product-grid {
   display: grid;
