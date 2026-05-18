@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from './api';
 import './Login.css';
-
-const LOGIN_URL = 'http://127.0.0.1:8000/token';
 
 const Login = () => {
   // State to hold user credentials. Here, we use one state object to manage both username and password for simplicity.
@@ -20,7 +19,7 @@ const Login = () => {
       formData.append('username', credentials.username);
       formData.append('password', credentials.password);
 
-      const response = await fetch(LOGIN_URL, {
+      const response = await fetch(`${API_BASE_URL}/token`, {
         method: 'POST',
         body: formData,
       });

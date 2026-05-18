@@ -2,77 +2,29 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Plus, Minus, Trash2, X, LayoutList } from 'lucide-react';
 import Navbar from './Navbar';
+import { authFetch, logout } from './api';
+import { useProducts, useCart } from './hooks';
 import './FlowerShop.css';
 
-const API_BASE_URL = 'http://127.0.0.1:8000';
-
 export default function FlowerShop() {
-  const [products, setProducts] = useState([]);
-  const [cartItems, setCartItems] = useState([]);
+  const { products, getProduct } = useProducts();
+  const { cartItems, fetchCart } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
   const [notification, setNotification] = useState('');
   const [pendingRemove, setPendingRemove] = useState(null); //holds the cart item awaiting delete confirmation
   const [searchQuery, setSearchQuery] = useState('');
 
-  const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
   const role = localStorage.getItem('role');
   const navigate = useNavigate();
 
-  const authHeaders = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  };
-
-  // Fetch products and cart when first loaded
-  useEffect(() => {
-    fetchProducts();
-    fetchCart();
-  }, []);
+  const handleLogout = () => logout(navigate);
 
   // Update page title to show in brackets the number of items in the cart currently
   useEffect(() => {
     const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
     document.title = count > 0 ? `Flower Shop (${count})` : 'Flower Shop';
   }, [cartItems]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('role');
-    navigate('/login', { replace: true });
-  };
-
-  const handleAuthError = (response) => {
-    if (response.status === 401) {
-      handleLogout();
-      return true;
-    }
-    return false;
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/products`);
-      if (!response.ok) throw new Error('Failed to fetch products');
-      setProducts(await response.json());
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
-  const fetchCart = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/cart`, {
-        headers: authHeaders,
-      });
-      if (handleAuthError(response)) return;
-      if (!response.ok) throw new Error('Failed to fetch cart');
-      setCartItems(await response.json());
-    } catch (error) {
-      console.error('Fetch error', error);
-    }
-  };
 
   // Display a toast notification for 2 seconds
   const showToast = (message) => {
@@ -83,15 +35,13 @@ export default function FlowerShop() {
   // Add a product to the cart
   const addToCart = async (productId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/cart`, {
+      const response = await authFetch('/cart', {
         method: 'POST',
-        headers: authHeaders,
         body: JSON.stringify({ product_id: productId, quantity: 1 }),
       });
-      if (handleAuthError(response)) return;
-      if (response.ok) {
+      if (response?.ok) {
         await fetchCart();
-        const product = products.find(p => p.id === productId);
+        const product = getProduct(productId);
         showToast(`${product.name} added to cart!`);
       }
     } catch (error) {
@@ -104,13 +54,11 @@ export default function FlowerShop() {
     if (newQuantity < 1) return;
     const item = cartItems.find(i => i.id === itemId);
     try {
-      const response = await fetch(`${API_BASE_URL}/cart/${itemId}`, {
+      const response = await authFetch(`/cart/${itemId}`, {
         method: 'PUT',
-        headers: authHeaders,
         body: JSON.stringify({ ...item, quantity: newQuantity }),
       });
-      if (handleAuthError(response)) return;
-      if (response.ok) await fetchCart();
+      if (response?.ok) await fetchCart();
     } catch (error) {
       console.error('Error updating quantity:', error);
     }
@@ -125,12 +73,8 @@ export default function FlowerShop() {
     const itemId = pendingRemove.id;
     setPendingRemove(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/cart/${itemId}`, {
-        method: 'DELETE',
-        headers: authHeaders,
-      });
-      if (handleAuthError(response)) return;
-      if (response.ok) {
+      const response = await authFetch(`/cart/${itemId}`, { method: 'DELETE' });
+      if (response?.ok) {
         await fetchCart();
         showToast('Item removed from cart');
       }
@@ -138,9 +82,6 @@ export default function FlowerShop() {
       console.error('Error removing from cart:', error);
     }
   };
-
-  // Helper: look up product by ID
-  const getProduct = (productId) => products.find(p => p.id === productId);
 
   // Cart totals
   const cartTotal = cartItems.reduce((sum, item) => {
