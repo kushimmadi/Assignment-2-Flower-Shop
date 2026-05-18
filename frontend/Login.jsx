@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
 
 const LOGIN_URL = 'http://127.0.0.1:8000/token';
@@ -76,7 +76,7 @@ const Login = () => {
         </form>
 
         <div className="login-footer">
-          <span>Don't have an account? <a href="#signup">Sign Up</a></span>
+          <span>Don't have an account? <Link to="/signup">Sign Up</Link></span>
         </div>
       </div>
     </div>
