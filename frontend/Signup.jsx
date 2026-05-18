@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_BASE_URL } from './api';
 import './Login.css';
-
-const REGISTER_URL = 'http://127.0.0.1:8000/register';
 
 const Signup = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '', confirmPassword: '' });
@@ -19,7 +18,7 @@ const Signup = () => {
 
         // Send registration request
         try {
-            const response = await fetch(REGISTER_URL, {
+            const response = await fetch(`${API_BASE_URL}/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

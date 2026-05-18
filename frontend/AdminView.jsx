@@ -2,71 +2,32 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Navbar from './Navbar';
+import { authFetch, logout } from './api';
+import { useProducts } from './hooks';
 import './FlowerShop.css';
-
-const API_BASE_URL = 'http://127.0.0.1:8000';
 
 // Admin-only view: displays all users' shopping carts
 export default function AdminView() {
   const [allCarts, setAllCarts] = useState([]);
-  const [products, setProducts] = useState([]);
+  const { products, getProduct } = useProducts();
 
-  const token = localStorage.getItem('token');
   const username = localStorage.getItem('username');
   const navigate = useNavigate();
 
-  // Auth header reused for all admin API calls
-  const authHeaders = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  };
+  const handleLogout = () => logout(navigate);
 
   useEffect(() => {
-    fetchAllCarts();
-    fetchProducts();
+    (async () => {
+      try {
+        const response = await authFetch('/admin/carts');
+        if (!response) return;
+        if (!response.ok) throw new Error('Failed to fetch carts');
+        setAllCarts(await response.json());
+      } catch (error) {
+        console.error('Error fetching carts:', error);
+      }
+    })();
   }, []);
-
-  // Redirect to login on 401 so expired tokens are handled gracefully
-  const handleAuthError = (response) => {
-    if (response.status === 401) {
-      handleLogout();
-      return true;
-    }
-    return false;
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('role');
-    navigate('/login', { replace: true });
-  };
-
-  // Fetch all carts across all users from the admin endpoint
-  const fetchAllCarts = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/admin/carts`, {
-        headers: authHeaders,
-      });
-      if (handleAuthError(response)) return;
-      if (!response.ok) throw new Error('Failed to fetch carts');
-      setAllCarts(await response.json());
-    } catch (error) {
-      console.error('Error fetching carts:', error);
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/products`);
-      if (!response.ok) throw new Error('Failed to fetch products');
-      setProducts(await response.json());
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
-
-  const getProduct = (productId) => products.find(p => p.id === productId);
 
   // Group cart items by user_id so each user's cart is shown together
   const cartsByUser = allCarts.reduce((acc, item) => {
