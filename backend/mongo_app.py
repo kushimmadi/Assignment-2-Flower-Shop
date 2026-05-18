@@ -187,6 +187,25 @@ def seed_products():
 ############################################
 
 
+# --- Registration endpoint ---
+@app.post("/register")
+async def register(data: RegisterRequest):
+    existing_user = users_collection.find_one({"username": data.username})
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="An account with this email already exists.",
+        )
+    users_collection.insert_one(
+        {
+            "username": data.username,
+            "password": get_password_hash(data.password),
+            "role": "user",
+        }
+    )
+    return {"status": "success", "message": f"User {data.username} registered successfully!"}
+
+
 # --- Login endpoint to obtain JWT token ---
 @app.post("/token")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):

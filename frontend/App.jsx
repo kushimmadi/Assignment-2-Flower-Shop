@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Login';
+import Signup from './Signup';
 import FlowerShop from './FlowerShop';
 import AdminView from './AdminView';
 
@@ -38,6 +39,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<ProtectedRoute><FlowerShop /></ProtectedRoute>} />
         <Route path="/login" element={<ProtectedLoginRoute><Login /></ProtectedLoginRoute>} />
+        <Route path="/signup" element={<ProtectedLoginRoute><Signup /></ProtectedLoginRoute>} />
         <Route path="/admin" element={<AdminRoute><AdminView /></AdminRoute>} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
