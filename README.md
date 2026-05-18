@@ -45,3 +45,75 @@ Kushi Immadi:
     - app.js
     - hook.js
 
+Nikita Bellett:
+- Work Completed:
+    - Added admin view functionality
+    - Added delete confirmation functionality
+    - Added NavBar for less code duplication 
+    - Added file authors as comments
+    - Readme
+
+- Files Changed:
+    - mongo_app.py
+    - AdminView.jsx
+    - App.jsx
+    - FlowerShop.css
+    - FlowerShop.jsx
+    - Login.jsx
+    - NavBar.jsx
+
+## Technical Stack
+
+| Layer     | Technology                                                                 |
+|-----------|---------------------------------------------------------------------------|
+| Frontend  | React (via Vite), React Router DOM, Lucide React (icons)                  |
+| Backend   | Python, FastAPI, Pydantic                                                 |
+| Database  | MongoDB (via PyMongo)                                                     |
+| Auth      | JWT (PyJWT), bcrypt for password hashing, OAuth2 password bearer flow     |
+| Dev Tools | Vite (frontend dev server & bundler), dotenv (environment variable mgmt)  |
+
+---
+
+## How to Run
+
+### Prerequisites
+
+- **Node.js** (v18+) and **npm**
+- **Python** (3.10+)
+- **MongoDB** instance (local or remote)
+
+### Backend
+
+```bash
+cd backend
+
+# Install Python dependencies
+pip install fastapi uvicorn pymongo pydantic python-dotenv bcrypt pyjwt
+
+# Create a .env file with the following variables:
+# SECRET_KEY=<your-jwt-secret>
+# db_username=<mongo-username>
+# db_password=<mongo-password>
+# db_host=localhost
+# db_port=27017
+# db_auth_source=admin
+# db_name=<your-db-name>
+# products_collection_name=products
+# cart_collection_name=cart
+# users_collection_name=users
+
+# Run the server
+uvicorn mongo_app:app --reload
+```
+
+### Frontend
+
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start the dev server (default: http://localhost:5173)
+npm run dev
+```
