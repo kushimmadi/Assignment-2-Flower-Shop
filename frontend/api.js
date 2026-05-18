@@ -1,3 +1,4 @@
+// Kushi
 export const API_BASE_URL = 'http://127.0.0.1:8000';
 
 // Automatically fetch the JWT token and log the user out if the session has expired

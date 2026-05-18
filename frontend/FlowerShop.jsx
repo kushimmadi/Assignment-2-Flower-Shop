@@ -1,3 +1,6 @@
+// Kushi
+// Michelle
+// Nikita
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Plus, Minus, Trash2, X, LayoutList } from 'lucide-react';

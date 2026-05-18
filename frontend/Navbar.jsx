@@ -1,3 +1,4 @@
+// Nikita
 import { LogOut } from 'lucide-react';
 
 // Shared navbar used by all pages

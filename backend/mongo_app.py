@@ -1,3 +1,5 @@
+# Kushi
+# Nikita
 from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI, HTTPException, Depends, Response, status
 from typing import Optional
