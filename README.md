@@ -62,6 +62,22 @@ Nikita Bellett:
     - Login.jsx
     - NavBar.jsx
 
+Michelle Bellamin:
+- Work Completed: 
+    - Added search functionality
+    - Added empty state for search functionality
+    - Added registration functionality
+    - Readme
+
+- Files Changed:
+    - mongo_app.py
+    - App.jsx
+    - FlowerShop.css
+    - FlowerShop.jsx
+    - Login.jsx
+    - Signup.jsx
+
+
 ## Technical Stack
 
 | Layer     | Technology                                                                 |
@@ -117,3 +133,29 @@ npm install
 # Start the dev server (default: http://localhost:5173)
 npm run dev
 ```
+
+## Folder Structure
+
+Assignment-2-Flower-Shop/
+
+├── README.md
+├── backend/
+│   ├── mongo_app.py          # FastAPI application - routes, auth, CORS, seed data
+│   └── mongo_db.py           # MongoDB connection setup and collection helpers
+└── frontend/
+    ├── package.json          # npm dependencies and scripts
+    ├── vite.config.js        # Vite bundler configuration
+    ├── index.html            # HTML entry point
+    ├── main.jsx              # React app bootstrap (ReactDOM render)
+    ├── App.jsx               # Root component with routing
+    ├── api.js                # API helper functions for backend requests
+    ├── hooks.js              # Custom React hooks (shared logic)
+    ├── FlowerShop.jsx        # Main shop page (product listing, cart)
+    ├── FlowerShop.css        # Shop page styles
+    ├── AdminView.jsx         # Admin dashboard for managing products
+    ├── Login.jsx             # Login page component
+    ├── Login.css             # Login page styles
+    ├── Signup.jsx            # User registration page
+    ├── Navbar.jsx            # Navigation bar component
+    └── public/
+        └── assets/           # Flower product images (rose, tulip, peony, etc.)
