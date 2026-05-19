@@ -134,6 +134,14 @@ npm install
 npm run dev
 ```
 
+### Test Accounts
+| Email                   | Password   | Role  |
+|-------------------------|------------|-------|
+| admin@example.com       | admin      | admin |
+| testuser@example.com    | testuser   | user  |
+
+These accounts are created automatically on first backend startup. Through sign up, you can only create a user account. The above admin login must be used to test admin functionality.
+
 ## Folder Structure
 
 ```
