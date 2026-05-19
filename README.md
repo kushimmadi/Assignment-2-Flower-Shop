@@ -136,11 +136,11 @@ npm run dev
 
 ## Folder Structure
 
+```
 Assignment-2-Flower-Shop/
-
 ├── README.md
 ├── backend/
-│   ├── mongo_app.py          # FastAPI application - routes, auth, CORS, seed data
+│   ├── mongo_app.py          # FastAPI application — routes, auth, CORS, seed data
 │   └── mongo_db.py           # MongoDB connection setup and collection helpers
 └── frontend/
     ├── package.json          # npm dependencies and scripts
@@ -159,3 +159,4 @@ Assignment-2-Flower-Shop/
     ├── Navbar.jsx            # Navigation bar component
     └── public/
         └── assets/           # Flower product images (rose, tulip, peony, etc.)
+```
